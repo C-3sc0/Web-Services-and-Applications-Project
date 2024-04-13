@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+    
     <head>
         <link href="style.css" rel="stylesheet" />
-        <title>Project</title>
+        <title>Movies</title>
         <meta charset="UTF-8" />
     </head>
-    <body>
+    
+    <body class="Home">
+    
         <h1>WSAA Project</h1>
+    
         <div class="topnav">
             <a class="active" href="#home">Home</a>
-            <a href="#about">About</a>
+            <a href="#about" onclick = "goToAbout()">About</a>
             <a href="#documentation">Documentation</a>
             <a href="#about">Tutorial</a>
         </div>
+    
         <h2>This is the landing page for the project</h2>
-        
+    
+        <img src="images/movie.gif" alt="Movies" class="center" />
+
+        <div><button> Try me</button></div>
         
         <footer>
-            <p>Author: Francesco Troja
-            <a href="https://github.com/C-3sc0"> github</a></p>
+            <p class = "Left">Author: Francesco Troja</p>
+            <p class = "right"><a href="https://github.com/C-3sc0"> github</a></p>
         </footer> 
+    
     </body>
+
+    <script> function goToAbout(){
+        window.location.href = 'about.html';
+
+    }
+        
+    </script>
 </html>
 
