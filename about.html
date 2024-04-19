@@ -2,51 +2,62 @@
 
 <html lang="en">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
         <link href="style.css" rel="stylesheet" />
     </head>
     <div class="about-section">
     <title>About</title>
     </div>
 
-    <body class = "About"> 
-        <h1>About</h1>
+    <body> 
 
-        <div class="topnav">
-            <a class="active" href="#home" onclick = "returnToHome()">Home</a>
-            <a href="#about">About</a>
-            <a href="#documentation">Documentation</a>
-            <a href="#about">Tutorial</a>
-        </div>
+        <h1 class="about">About</h1>
 
-            <img src="images/project-scope.jpeg" alt="Project" class="center resized-image" />
+    <header>
+        <nav>
+            <a href="#home" class="split" onclick="returnToHome()">Home</a>
+            <a href="#about" onclick="goToAbout()">About</a>
+            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
+            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
+            <a href="#Documentation">Documentation</a>
+        </nav>
+    </header>
 
-
+    <div>       
+        <img src="images/project-scope.jpeg" alt="Project" class="center resized-image" /></br>
+    </div> 
+    
+    <div id="text">
             <p>Welcome to the project scope page. Here, we will outline the project's objectives 
-                and detail the essential tasks required for its successful completion.</p> 
-            <h3>1. Project Description</h3>
+                and detail the essential tasks required for its successful completion.</p></br>
+            <h3>1. Project Description</h3></br>
             <p>The primary objective of this project is to develop a robust program demonstrating expertise in building 
                 and utilizing RESTful APIs. This will be achieved by creating a web application using the Flask framework, 
                 which will feature a RESTful API linked to one or more database tables. Furthermore, the project involves 
                 designing web pages that can interact with the API, facilitating CRUD (Create, Read, Update, Delete) 
                 operations on the data. Through this endeavor, the aim is to showcase a comprehensive understanding of 
-                RESTful API development and its application within a web-based environment.</p>
-            <h3>2. Handup</h3>
-            <p>To successfully complete the project, the following items are required:</p>
+                RESTful API development and its application within a web-based environment.</p></br>
+            <h3>2. Handup</h3></br>
+            <p>To successfully complete the project, the following items are required:</p></br>
             <p>1. <strong>GitHub Repository Link</strong>: This should contain the project code and only the relevant project files.</p>
             <p>2. <strong>ReadMe File</strong>: If there are any specific instructions or requirements needed to run the code, they 
-                should be clearly outlined in the ReadMe file.</p>
+                should be clearly outlined in the ReadMe file.</p></br>
             <p>3. <strong>Hosting Information</strong>: While hosting the server on a cloud hosting site like Azure or Pythonanywhere 
-                is optional, if you choose to do so, please provide the link to the hosted application in the ReadMe file.</p>
+                is optional, if you choose to do so, please provide the link to the hosted application in the ReadMe file.</p></br>
             <p>4. <strong>Additional Documentation</strong>: Include any other documentation that you deem necessary or helpful for 
-                understanding and working with the project.</p>
+                understanding and working with the project.</p></br></br></br>
+        </div>               
                 
-                
-                <div><button onclick="returnToHome()"> Return Home</button></div>
+        <div>
+            <button class="returnHome" onclick="returnToHome()"> Return Home</button>
+        </div>
 
-                <footer>
+                <footer class="footer2">
                     <p class = "Left">Author: Francesco Troja</p>
-                    <p class = "right"><a href="https://github.com/C-3sc0"> github</a></p>
-                </footer> 
+                    <a href="https://github.com/C-3sc0" target="_blank">
+                    <i class="fa fa-github" style="font-size:50px"></i>
+                    </a>
+                </footer>
 
 
     </body>
@@ -55,6 +66,16 @@
         function returnToHome(){
             window.location.href = 'project.html';
         }
+        function goToAbout(){
+            window.location.href = 'about.html';
+        }
+        function goToMDB(){
+            window.location.href = 'movie.html';
+        }
+        function goToTv()
+        {
+            window.location.href = 'tv-show.html';
+    }
     </script>
 
 </html>
