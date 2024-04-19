@@ -1,39 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
     
+<!-- Load an icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <head>
+        <meta charset="UTF-8" />
         <link href="style.css" rel="stylesheet" />
         <title>Movies</title>
-        <meta charset="UTF-8" />
     </head>
     
-    <body class="Home">
+    <body>
     
-        <h1>WSAA Project</h1>
+        <h1 class="project">WSAA Project</h1>
     
-        <div class="topnav">
-            <a class="active" href="#home">Home</a>
-            <a href="#about" onclick = "goToAbout()">About</a>
-            <a href="#documentation">Documentation</a>
-            <a href="#about">Tutorial</a>
-        </div>
-    
-        <h2>This is the landing page for the project</h2>
-    
-        <img src="images/movie.gif" alt="Movies" class="center" />
-
-        <div><button> Try me</button></div>
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <a href="#home" class="split" onclick="returnToHome()">Home</a>
+            <a href="#about" onclick="goToAbout()">About</a>
+            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
+            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
+            <a href="#Documentation">Documentation</a>
+        </nav>
+    </header>
         
-        <footer>
-            <p class = "Left">Author: Francesco Troja</p>
-            <p class = "right"><a href="https://github.com/C-3sc0"> github</a></p>
-        </footer> 
+    <div id="text">
+        <h2>The Movie and TV show Homepage</h2>
+        <p><strong>Welcome to the Movie and TV Show Homepage, where your next favorite entertainment awaits!</strong></p>
+        <p><strong>Dive into a world of cinematic delight as you curate your watchlist with beloved classics and exciting new releases.</strong></p>
+        <p><strong>Ready to embark on a journey of discovery? Let's find the perfect movie or TV show to captivate your imagination.</strong></p>
+        <img src="images/movie.gif" alt="Movies" class="center" /></br></br>
+    </div>
+
+    <div class="button-pyramid">
+            <button class="startbutton">Your Watch List</button>
+    </div></br>
+        <div class="explore-buttons">
+                <button class="MovieDB" onclick="goToMDB()"> Explore movies</button>
+                <button class="TVDB"onclick="goToTv()"> Explore TV shows</button>
+        </div>
+        
+    <footer class="footer2">
+        <p class = "Left">Author: Francesco Troja</p>
+        <a href="https://github.com/C-3sc0" target="_blank">
+        <i class="fa fa-github" style="font-size:50px"></i>
+        </a>
+    </footer> 
     
     </body>
 
-    <script> function goToAbout(){
-        window.location.href = 'about.html';
-
+    <script> 
+        function returnToHome(){
+            window.location.href = 'project.html';
+        }
+        function goToAbout(){
+            window.location.href = 'about.html';
+        }
+        function goToMDB(){
+            window.location.href = 'movie.html';
+        }
+        function goToTv()
+        {
+            window.location.href = 'tv-show.html';
     }
         
     </script>
