@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet" />
+    <title>Movie Database</title>
+</head>
+<body>
+    <h1 class="tmdb"> Movie Database</h1>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <a href="#home" class="split" onclick="returnToHome()">Home</a>
+            <a href="#about" onclick= "goToAbout()">About</a>
+            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
+            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
+            <a href="#Documentation">Documentation</a>
+        </nav>
+    </header>
+
+    <main id="main"> </main>
+
+    <footer>
+        <p class = "Left">Author: Francesco Troja</p>
+        <a href="https://github.com/C-3sc0" target="_blank">
+        <i class="fa fa-github" style="font-size:50px"></i>
+        </a>
+    </footer> 
+
+       <script>
+        // Functions to redirect the user to different pages
+        function returnToHome(){
+            window.location.href = 'project.html';
+        }
+
+        function goToAbout(){
+        window.location.href = 'about.html';
+        }
+
+        function goToMDB(){
+            window.location.href = 'movie.html';
+        }
+        function goToTv(){
+            window.location.href = 'tv-show.html';
+        }
+
+        //API Details
+        const API_KEY = 'api_key=fa4eda4583d591db539b12271967147a';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&' + API_KEY;
+        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
+        const main = document.getElementById('main');
+
+        getMovies(API_URL)
+        
+        // Fetching movies from the API
+        function getMovies(url){
+            fetch(url).then(res => {
+                console.log(res.headers.get('Content-Type'));
+                console.log(res.headers.get('Date'));
+                 return res.json();
+            }).then(data => {
+                console.log(data.result);
+                showMovies(data.results);
+            });
+        }
+
+        // Function to display movies on the page
+        function showMovies(data){
+                main.innerHTML = '';
+                data.forEach(movie => {
+                    const{title,poster_path,vote_average,overview} = movie;
+                    console.log(title,vote_average);                     
+                    const movieEl = document.createElement("div");
+                    movieEl.classList.add("movie");
+                    movieEl.innerHTML = `
+                        <img src="${IMG_URL+poster_path}" alt="${title}">
+                        <div class= "movie-info">
+                            <h3>${title}</h3>
+                            <span class="${getColor(vote_average)}"> ${vote_average}</span>
+                        </div>
+
+                        <div class="overview">
+                            <h3>overview</h3>
+                            ${overview}
+                        </div>                
+                    `
+                    main.appendChild(movieEl);
+                })
+        }
+
+        // Function to get color based on vote average
+        function getColor(vote){
+            if(vote>= 8){
+                return 'green'
+            }else if(vote >= 5){
+                return "orange"
+            }else{
+                return 'red'
+            }
+        }
+       </script>
+</body>
+</html>
