@@ -5,6 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet" />
     <title>Movie Database</title>
 </head>
@@ -14,15 +15,24 @@
     <!-- Navigation Bar -->
     <header>
         <nav>
+            <form  id="form">
+                <input type="text" placeholder="Search.." id="search">
+            </form>
             <a href="#home" class="split" onclick="returnToHome()">Home</a>
             <a href="#about" onclick= "goToAbout()">About</a>
             <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
             <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
+            <a href="#Wish List" onclick="whishList()"> Wish List </a>
             <a href="#Documentation">Documentation</a>
         </nav>
     </header>
 
     <main id="main"> </main>
+    <div class="pagination">
+        <div class="page" id="prev">Previous page</div>
+        <div class="current" id="curr">1</div>
+        <div class="page" id="next">Next page</div>
+    </div>
 
     <footer>
         <p class = "Left">Author: Francesco Troja</p>
@@ -48,25 +58,66 @@
             window.location.href = 'tv-show.html';
         }
 
+        function whishList(){
+            window.location.href = 'wish-list.html';
+        }
+
         //API Details
         const API_KEY = 'api_key=fa4eda4583d591db539b12271967147a';
         const BASE_URL = 'https://api.themoviedb.org/3';
         const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&' + API_KEY;
         const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+        const searchURL = BASE_URL + '/search/movie?'+API_KEY;
 
         const main = document.getElementById('main');
+        const form = document.getElementById('form');
+        const search = document.getElementById('search');
+
+        const prev = document.getElementById('prev');
+        const current = document.getElementById('curr');
+        const next = document.getElementById('next');
+
+        var currentPage = 1;
+        var nextPage = 2;
+        var previousPAge = 3;
+        var lastUrl = '';
+        var totalPages = 43636;
 
         getMovies(API_URL)
         
         // Fetching movies from the API
         function getMovies(url){
+            lastUrl = url;
             fetch(url).then(res => {
                 console.log(res.headers.get('Content-Type'));
                 console.log(res.headers.get('Date'));
                  return res.json();
             }).then(data => {
                 console.log(data.result);
-                showMovies(data.results);
+                if (data.results.length !== 0){
+                    showMovies(data.results);
+                    currentPage = data.page;
+                    nextPage = currentPage + 1;
+                    previousPAge = currentPage - 1;
+                    totalPages = data.total_pages;
+
+                    current.innerHTML = currentPage;
+                    if(currentPage <= 1){
+                        prev.classList.add('disabled');
+                        next.classList.remove('disabled');
+                    }else if (currentPage >= totalPages) {
+                        prev.classList.remove('disabled');
+                        next.classList.add('disabled');
+                    }else{
+                        prev.classList.remove('disabled');
+                        next.classList.remove('disabled');
+                    }
+
+                    search.scrollIntoView({behavior : 'smooth'})
+
+                }else{
+                    main.innerHTML='<h1 class = "no-results">No results Found</h1>'
+                }
             });
         }
 
@@ -79,7 +130,7 @@
                     const movieEl = document.createElement("div");
                     movieEl.classList.add("movie");
                     movieEl.innerHTML = `
-                        <img src="${IMG_URL+poster_path}" alt="${title}">
+                    <img src="${poster_path? IMG_URL + poster_path: "https://placehold.co/1080x1580?text=Poster+Not+Found"}" alt="${name}">
                         <div class= "movie-info">
                             <h3>${title}</h3>
                             <span class="${getColor(vote_average)}"> ${vote_average}</span>
@@ -87,7 +138,7 @@
 
                         <div class="overview">
                             <h3>overview</h3>
-                            ${overview}
+                            ${overview? overview: "No overview available"}</br>
                         </div>                
                     `
                     main.appendChild(movieEl);
@@ -102,6 +153,47 @@
                 return "orange"
             }else{
                 return 'red'
+            }
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const searchTerm = search.value;
+            if(searchTerm) {
+                getMovies(searchURL+'&query='+searchTerm)
+            }else{
+                getMovies(API_URL);
+            }
+
+        })
+
+        prev.addEventListener('click', () =>{
+            if (previousPAge > 0){
+                pageCall(previousPAge);
+            }
+        })
+
+        next.addEventListener('click', () =>{
+            if (nextPage <= totalPages){
+                pageCall(nextPage);
+            }
+        })
+
+        function pageCall(page){
+            let urlSplit = lastUrl.split('?');
+            let queryParams = urlSplit[1].split('&');
+            let key = queryParams[queryParams.length - 1].split('=');
+            if (key[0] != 'page'){
+                let url = lastUrl + '&page=' + page
+                getMovies(url)
+            }else{
+                key[1] = page.toString();
+                let a = key.join('=');
+                queryParams[queryParams.length - 1] = a;
+                let b = queryParams.join('&');
+                let url = urlSplit[0] +'?'+b
+                getMovies(url);
             }
         }
        </script>
