@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" />
+    <title>Wish List</title>
+</head>
+<body>
+    <h1 class="tmdb">Wish List</h1>
+
+    <header>
+        <div id="navbar-container">
+            <nav>
+                <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
+                <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
+                <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
+                <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
+                <a href="#Wish List" class="nav-item active" onclick="whishList()">Wish List</a>
+                <a href="#Documentation" class="nav-item">Documentation</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="table-users">
+        <div class="table-header">Movies</div>
+        
+        <table cellspacing="0">
+           <tr>
+              <th>Index ID</th>
+              <th>Movie ID</th>
+              <th>Poster</th>
+              <th>Title</th>
+              <th width="230">Feedback</th>
+              <th>Update</th>
+              <th>Delete</th>
+           </tr>
+     
+           <tr>
+              <td>1</td>
+              <td>693134</td>
+              <td id="mv-1"><img src= alt="" /></td>
+              <td>Dune: Part two</td>
+              <td>I like this movie</td>
+              <td><button>update</button></td>
+              <td><button>delete</button></td>
+           </tr>
+        </table>
+     </div></br></br></br></br></br></br></br></br></br></br></br>
+
+     <div class="table-users">
+        <div class="table-header">Tv show</div>
+        
+        <table cellspacing="0">
+           <tr>
+              <th>Index ID</th>
+              <th>TV Show ID</th>
+              <th>Poster</th>
+              <th>Title</th>
+              <th width="230">Feedback</th>
+              <th>Update</th>
+              <th>Delete</th>
+           </tr>
+     
+           <tr>
+              <td>1</td>
+              <td>108545</td>
+              <td id="tv-1"><img src= alt="" /></td>
+              <td>3 Body Problem</td>
+              <td>i did not like it </td>
+              <td><button>update</button></td>
+              <td><button>delete</button></td>
+           </tr>
+        </table>
+     </div>
+
+
+
+    <footer class="footer2"> 
+        <p class = "Left">Author: Francesco Troja</p>
+        <a href="https://github.com/C-3sc0" target="_blank">
+        <i class="fa fa-github" style="font-size:50px"></i>
+        </a>
+    </footer> 
+
+       <script>
+        function returnToHome(){
+            window.location.href = 'project.html';
+        }
+        function goToAbout(){
+        window.location.href = 'about.html';
+        }
+        function goToMDB(){
+            window.location.href = 'movie.html';
+        }
+        function goToTv(){
+            window.location.href = 'tv-show.html';
+        }
+        function whishList(){
+            window.location.href = 'wish-list.html';
+        }
+
+        </script>
+</body>
+</html>
