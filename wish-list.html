@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet" />
+    <script src="main.js"></script>
+    <script src="movie.html"></script>
     <title>Wish List</title>
 </head>
 <body>
@@ -28,30 +30,27 @@
     <div class="table-users">
         <div class="table-header">Movies</div>
         
-        <table cellspacing="0">
-           <tr>
-              <th>Index ID</th>
-              <th>Movie ID</th>
-              <th>Poster</th>
-              <th>Title</th>
-              <th width="230">Feedback</th>
-              <th>Update</th>
-              <th>Delete</th>
-           </tr>
-     
-           <tr>
-              <td>1</td>
-              <td>693134</td>
-              <td id="mv-1"><img src= alt="" /></td>
-              <td>Dune: Part two</td>
-              <td>I like this movie</td>
-              <td><button>update</button></td>
-              <td><button>delete</button></td>
-           </tr>
+        <div id="updateForm" style="display: none;">
+            <input type="text" id="newTitle" placeholder="Enter new movie title">
+            <button id="updateButton">Update Now</button>
+        </div>
+        <table cellspacing="0" id="movieTable">
+            <thead>
+                <tr>
+                    <th>Movie ID</th>
+                    <th>Title</th>
+                    <th>Poster</th>
+                    <th width="230">Feedback</th>
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+           
+                <tbody id="movieTableBody"></tbody>
         </table>
      </div></br></br></br></br></br></br></br></br></br></br></br>
 
-     <div class="table-users">
+      <!--  <div class="table-users">
         <div class="table-header">Tv show</div>
         
         <table cellspacing="0">
@@ -75,7 +74,7 @@
               <td><button>delete</button></td>
            </tr>
         </table>
-     </div>
+     </div> -->
 
 
 
@@ -87,22 +86,40 @@
     </footer> 
 
        <script>
-        function returnToHome(){
-            window.location.href = 'project.html';
-        }
-        function goToAbout(){
-        window.location.href = 'about.html';
-        }
-        function goToMDB(){
-            window.location.href = 'movie.html';
-        }
-        function goToTv(){
-            window.location.href = 'tv-show.html';
-        }
-        function whishList(){
-            window.location.href = 'wish-list.html';
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist'));
 
-        </script>
+            const tableBody = document.getElementById('movieTableBody');
+            wishlist.forEach(movie => {
+            const tableRow = createTableRow(movie);
+            tableBody.appendChild(tableRow);
+        });
+
+        function createTableRow(movie) {
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+            <td>${movie.id}</td>
+            <td>${movie.title}</td>
+            <td><img src="${IMG_URL + movie.poster_path}" alt="${movie.title}" style="max-width: 150px; max-height: 150px;"></td>
+            <td></td>
+            <td><button onclick="showUpdate(this)">Update</button></td>
+            <td><button onclick="doDelete(this)">Delete</button></td>
+            `;
+        return tableRow;
+        }
+        });
+
+        function doDelete(movieAdded) {
+            console.log("in delete")
+            const tableElement = document.getElementById('movieTableBody')
+            const index = movieAdded.parentNode.parentNode.rowIndex;
+            console.log(index)
+            tableElement.deleteRow(index - 1);
+            const rowIndex = index - 1;
+            let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+            wishlist.splice(rowIndex, 1);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        }
+       </script>
 </body>
 </html>
