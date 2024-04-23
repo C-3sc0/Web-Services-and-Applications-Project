@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet" />
+    <script src="main.js"></script>
     <title>Movie Database</title>
 </head>
 <body>
     <h1 class="tmdb"> Movie Database</h1>
 
-    <!-- Navigation Bar -->
     <header>
-        <nav>
-            <form  id="form">
-                <input type="text" placeholder="Search.." id="search">
+        <div id="navbar-container">
+            <nav>
+                <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
+                <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
+                <a href="#Movie database" class="nav-item active" onclick="goToMDB()">Movie Database</a>
+                <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
+                <a href="#Wish List" class="nav-item" onclick="whishList()">Wish List</a>
+                <a href="#Documentation" class="nav-item">Documentation</a>
+            </nav>
+            <form id="form">
+                <input type="text" placeholder="Search.." id="search" class="search-box">
             </form>
-            <a href="#home" class="split" onclick="returnToHome()">Home</a>
-            <a href="#about" onclick= "goToAbout()">About</a>
-            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
-            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
-            <a href="#Wish List" onclick="whishList()"> Wish List </a>
-            <a href="#Documentation">Documentation</a>
-        </nav>
+        </div>
     </header>
 
     <main id="main"> </main>
     <div class="pagination">
         <div class="page" id="prev">Previous page</div>
-        <div class="current" id="curr">1</div>
+        <div class="current" id="curr" onclick="goToMDB()">1</div>
         <div class="page" id="next">Next page</div>
     </div>
 
@@ -41,38 +42,7 @@
         </a>
     </footer> 
 
-       <script>
-        // Functions to redirect the user to different pages
-        function returnToHome(){
-            window.location.href = 'project.html';
-        }
-
-        function goToAbout(){
-        window.location.href = 'about.html';
-        }
-
-        function goToMDB(){
-            window.location.href = 'movie.html';
-        }
-        function goToTv(){
-            window.location.href = 'tv-show.html';
-        }
-
-        function whishList(){
-            window.location.href = 'wish-list.html';
-        }
-
-        //API Details
-        const API_KEY = 'api_key=fa4eda4583d591db539b12271967147a';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&' + API_KEY;
-        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-        const searchURL = BASE_URL + '/search/movie?'+API_KEY;
-
-        const main = document.getElementById('main');
-        const form = document.getElementById('form');
-        const search = document.getElementById('search');
-
+       <script>        
         const prev = document.getElementById('prev');
         const current = document.getElementById('curr');
         const next = document.getElementById('next');
@@ -83,7 +53,7 @@
         var lastUrl = '';
         var totalPages = 43636;
 
-        getMovies(API_URL)
+        getMovies(API_MOVIE_URL)
         
         // Fetching movies from the API
         function getMovies(url){
@@ -94,6 +64,7 @@
                  return res.json();
             }).then(data => {
                 console.log(data.result);
+                // Display movies if data is available
                 if (data.results.length !== 0){
                     showMovies(data.results);
                     currentPage = data.page;
@@ -114,9 +85,12 @@
                     }
 
                     search.scrollIntoView({behavior : 'smooth'})
-
                 }else{
-                    main.innerHTML='<h1 class = "no-results">No results Found</h1>'
+                    main.innerHTML=`
+                    <div>
+                    <img src="images/no_result.png" alt="No results found">
+                    </div>
+                    `
                 }
             });
         }
@@ -125,25 +99,43 @@
         function showMovies(data){
                 main.innerHTML = '';
                 data.forEach(movie => {
-                    const{title,poster_path,vote_average,overview} = movie;
-                    console.log(title,vote_average);                     
+                    const{id,title,poster_path,vote_average,overview} = movie;
+                    const roundedVoteAverage = vote_average.toFixed(1); // round to 1 decimal place
+                    // console.log(data);
+                    console.log(id,title);                     
                     const movieEl = document.createElement("div");
                     movieEl.classList.add("movie");
                     movieEl.innerHTML = `
                     <img src="${poster_path? IMG_URL + poster_path: "https://placehold.co/1080x1580?text=Poster+Not+Found"}" alt="${name}">
                         <div class= "movie-info">
                             <h3>${title}</h3>
-                            <span class="${getColor(vote_average)}"> ${vote_average}</span>
+                            <span class="${getColor(roundedVoteAverage)}"> ${roundedVoteAverage}</span>
                         </div>
 
                         <div class="overview">
                             <h3>overview</h3>
                             ${overview? overview: "No overview available"}</br>
+                            <button class="addToWhishList" id=${id}>Add to Whish List</button> 
                         </div>                
                     `
                     main.appendChild(movieEl);
+
+                    // Add event listener to add movie to wishlist
+                    document.getElementById(id).addEventListener('click', () => {
+                    let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+
+                    // Check if the movie is already in the wishlist
+                    const movieIndex = wishlist.findIndex(item => item.id === id);
+                    if (movieIndex === -1) {
+                        wishlist.push(movie);
+                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                        console.log("The movie has been added to the wishlist, check it out");
+                    }else{
+                        console.log("The movie is already in the wishlist");
+                    }                  
+                    })
                 })
-        }
+            }
 
         // Function to get color based on vote average
         function getColor(vote){
@@ -163,9 +155,8 @@
             if(searchTerm) {
                 getMovies(searchURL+'&query='+searchTerm)
             }else{
-                getMovies(API_URL);
+                getMovies(API_MOVIE_URL);
             }
-
         })
 
         prev.addEventListener('click', () =>{
@@ -195,7 +186,7 @@
                 let url = urlSplit[0] +'?'+b
                 getMovies(url);
             }
-        }
+        }    
        </script>
 </body>
 </html>
