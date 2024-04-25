@@ -1,125 +1,186 @@
 <!DOCTYPE html>
-
 <html lang="en">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" />
-    <script src="main.js"></script>
-    <script src="movie.html"></script>
-    <title>Wish List</title>
-</head>
-<body>
-    <h1 class="tmdb">Wish List</h1>
-
-    <header>
-        <div id="navbar-container">
-            <nav>
-                <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
-                <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
-                <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
-                <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
-                <a href="#Wish List" class="nav-item active" onclick="whishList()">Wish List</a>
-                <a href="#Documentation" class="nav-item">Documentation</a>
-            </nav>
-        </div>
-    </header>
-
-    <div class="table-users">
-        <div class="table-header">Movies</div>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="style.css" rel="stylesheet" />
+        <script src="main.js"></script>
+        <title>Wish List</title>
+    </head>
+        <body>
+            <h1 class="tmdb">Wish List</h1>
+                <header>
+                    <div id="navbar-container">
+                        <nav>
+                            <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
+                            <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
+                            <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
+                            <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
+                            <a href="#Wish List" class="nav-item active" onclick="whishList()">Wish List</a>
+                            <a href="#Documentation" class="nav-item">Documentation</a>
+                        </nav>
+                    </div>
+                </header>
+                    <div class="table-users">
+                    <div class="table-header">Movies</div>
+                        <table cellspacing="0" id="movieTable">
+                            <thead>
+                                <tr>
+                                    <th>Movie ID</th>
+                                    <th>Title</th>
+                                    <th>Poster</th>
+                                    <th width="230">Feedback</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                                <tbody id="movieTableBody"></tbody>
+                        </table>
+                    </div></br></br></br></br></br></br></br></br></br></br></br>
+         
+                        <div id="updateForm" style="display: none;">
+                           <h4> Please Enter a new Movie Title below:</h4>
+                           <input type="text" id="newTitle" placeholder="movie title">
+                           <button id="updateButton">Update Now</button> 
+                        </div> 
         
-        <div id="updateForm" style="display: none;">
-            <input type="text" id="newTitle" placeholder="Enter new movie title">
-            <button id="updateButton">Update Now</button>
-        </div>
-        <table cellspacing="0" id="movieTable">
-            <thead>
-                <tr>
-                    <th>Movie ID</th>
-                    <th>Title</th>
-                    <th>Poster</th>
-                    <th width="230">Feedback</th>
-                    <th>Update</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-           
-                <tbody id="movieTableBody"></tbody>
-        </table>
-     </div></br></br></br></br></br></br></br></br></br></br></br>
+                <!--  <div class="table-users">
+                <div class="table-header">Tv show</div>
 
-      <!--  <div class="table-users">
-        <div class="table-header">Tv show</div>
+                <table cellspacing="0">
+                   <tr>
+                      <th>Index ID</th>
+                      <th>TV Show ID</th>
+                      <th>Poster</th>
+                      <th>Title</th>
+                      <th width="230">Feedback</th>
+                      <th>Update</th>
+                      <th>Delete</th>
+                   </tr> -->
+         
+         
+            <footer class="footer2"> 
+                <p class = "Left">Author: Francesco Troja</p>
+                <a href="https://github.com/C-3sc0" target="_blank">
+                <i class="fa fa-github" style="font-size:50px"></i>
+                </a>
+            </footer> 
         
-        <table cellspacing="0">
-           <tr>
-              <th>Index ID</th>
-              <th>TV Show ID</th>
-              <th>Poster</th>
-              <th>Title</th>
-              <th width="230">Feedback</th>
-              <th>Update</th>
-              <th>Delete</th>
-           </tr>
-     
-           <tr>
-              <td>1</td>
-              <td>108545</td>
-              <td id="tv-1"><img src= alt="" /></td>
-              <td>3 Body Problem</td>
-              <td>i did not like it </td>
-              <td><button>update</button></td>
-              <td><button>delete</button></td>
-           </tr>
-        </table>
-     </div> -->
+               <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                    console.log(wishlist)
+                
+                    const tableBody = document.getElementById('movieTableBody');
+                    wishlist.forEach(movie => {
+                    const tableRow = createTableRow(movie);
+                    tableBody.appendChild(tableRow);
+                    });
+                });
+            
+            
+                function createTableRow(movie) {
+                    const tableRow = document.createElement('tr');
+                    tableRow.innerHTML = `
+                    <td>${movie.id}</td>
+                    <td>${movie.title}</td>
+                    <td><img src="${IMG_URL + movie.poster_path}" alt="${movie.title}" style="max-width: 150px; max-height: 150px;"></td>
+                    <td></td>
+                    <td><button class="updateBut" onclick="doUpdate(${movie.id})">Update</button></td>
+                    <td><button class="deleteBut" onclick="doDelete(this)">Delete</button></td>
+                    `;
+                    return tableRow;
+                }
+            
+            
+                function updateTable(wishlist) {
+                    const tableBody = document.getElementById('movieTableBody');
+                    const updateForm = document.getElementById('updateForm');
+                    updateForm.style.display = 'none';
+                    tableBody.style.display = 'table-row-group';
+                    tableBody.innerHTML = '';
+                    wishlist.forEach(movie => {
+                        const tableRow = createTableRow(movie);
+                        tableBody.appendChild(tableRow);
+                    });
+                };
+                
+                // function to delete the movie from the wishlist
+                function doDelete(movieAdded) {
+                    console.log("in delete")
+                    const tableElement = document.getElementById('movieTableBody')
+                    const index = movieAdded.parentNode.parentNode.rowIndex;
+                    console.log(index)
+                    tableElement.deleteRow(index - 1);
+                    const rowIndex = index - 1;
+                    let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                    wishlist.splice(rowIndex, 1);
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                };
 
+                // function to replace and update a movie that is in the wishlist
+                function doUpdate(movieName){
+                    const tableBody = document.getElementById('movieTableBody');
+                    const updateForm = document.getElementById('updateForm');
+                    const updateButton = document.getElementById('updateButton');
+                
+                    tableBody.style.display = 'none';
+                    updateForm.style.display = 'block';
+         
+                    updateButton.addEventListener('click', function(){
+                        const newTitle = document.getElementById('newTitle').value;
+                        $.ajax({
+                            'url': `${searchMovieURL}&query=${newTitle}`,
+                            'method': 'GET',
+                            'dataType': 'json',
+                            'success': function(data) {
+                                const searchResults = data.results;
+            
+                                // Display search results and prompt user to select the correct movie
+                                const selectedMovie = selectMovie(searchResults);
+                                if (selectedMovie) {
+                                    let wishlist = JSON.parse(localStorage.getItem('wishlist'));
+                                    const movieIndex = wishlist.findIndex(item => item.id === movieName);
+                                    if (movieIndex !== -1) {
+                                        wishlist[movieIndex] = {
+                                            id: selectedMovie.id,
+                                            title: selectedMovie.title,
+                                            poster_path: selectedMovie.poster_path
+                                        }
+                                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                                        updateTable(wishlist);
+                                    }
+                                } else {
+                                    alert("Movie not found or selected!");
+                                }
+                            },
+                            'error': function(xhr, status, error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    });
+                };
 
+                // Function to prompt the user to select a movie from search results
+                function selectMovie(movieSearch) {
+                    const movieOpt = movieSearch.map(movie => ({
+                        id: movie.id,
+                        title: movie.title,
+                        poster_path: movie.poster_path
+                    }));
+                
+                    const movieIndex = prompt("Select the movie you want to update:\n" +
+                    movieOpt.map((movie, index) => `${index + 1}. ${movie.title}`).join('\n'));
+                
+                    if (movieIndex && movieIndex >= 1 && movieIndex <= movieSearch.length) {
+                        return movieOpt[movieIndex - 1];
+                    } else {
+                        return null; // User canceled or invalid selection
+                    }
+                }
 
-    <footer class="footer2"> 
-        <p class = "Left">Author: Francesco Troja</p>
-        <a href="https://github.com/C-3sc0" target="_blank">
-        <i class="fa fa-github" style="font-size:50px"></i>
-        </a>
-    </footer> 
-
-       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist'));
-
-            const tableBody = document.getElementById('movieTableBody');
-            wishlist.forEach(movie => {
-            const tableRow = createTableRow(movie);
-            tableBody.appendChild(tableRow);
-        });
-
-        function createTableRow(movie) {
-            const tableRow = document.createElement('tr');
-            tableRow.innerHTML = `
-            <td>${movie.id}</td>
-            <td>${movie.title}</td>
-            <td><img src="${IMG_URL + movie.poster_path}" alt="${movie.title}" style="max-width: 150px; max-height: 150px;"></td>
-            <td></td>
-            <td><button onclick="showUpdate(this)">Update</button></td>
-            <td><button onclick="doDelete(this)">Delete</button></td>
-            `;
-        return tableRow;
-        }
-        });
-
-        function doDelete(movieAdded) {
-            console.log("in delete")
-            const tableElement = document.getElementById('movieTableBody')
-            const index = movieAdded.parentNode.parentNode.rowIndex;
-            console.log(index)
-            tableElement.deleteRow(index - 1);
-            const rowIndex = index - 1;
-            let wishlist = JSON.parse(localStorage.getItem('wishlist'));
-            wishlist.splice(rowIndex, 1);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        }
-       </script>
-</body>
+               </script>
+        </body>
 </html>
