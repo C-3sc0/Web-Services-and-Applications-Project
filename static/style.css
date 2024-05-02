@@ -364,7 +364,7 @@ main{
     background-color: #edf7f8;
   }
 
-  #updateButton {
+  #updateButton, #updateShowButton{
   background-color: #fbeee0;
   border: 2px solid #422800;
   border-radius: 70px;
@@ -383,23 +383,23 @@ main{
   touch-action: manipulation;
 }
 
-#updateButton:hover {
+#updateButton:hover, #updateShowButton:hover {
   background-color: #fff;
 }
 
-#updateButton:active {
+#updateButton:active, #updateShowButton:active {
   box-shadow: #422800 2px 2px 0 0;
   transform: translate(2px, 2px);
 }
 
 @media (min-width: 768px) {
-  #updateButton {
+  #updateButton #updateShowButton{
     min-width: 120px;
     padding: 0 25px;
   }
 }
 
-#updateForm, #noMovieAvailable{
+#updateForm, #noMovieAvailable, #TvShowUpdateForm{
   text-align: center;
 }
 
@@ -444,18 +444,6 @@ main{
   animation: glowing-button-85 20s linear infinite;
   transition: opacity 0.3s ease-in-out;
   border-radius: 10px;
-}
-
-@keyframes glowing-button-85 {
-  0% {
-    background-position: 0 0;
-  }
-  50% {
-    background-position: 400% 0;
-  }
-  100% {
-    background-position: 0 0;
-  }
 }
 
 .updateBut:after, .deleteBut:after {
