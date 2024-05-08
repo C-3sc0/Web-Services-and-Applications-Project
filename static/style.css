@@ -26,7 +26,7 @@ h1.project {
 }
 
 
-h1.tmdb {
+h1.tmdb, h1.Doc{
     margin: 0;
     width: 101%;
     background: #333;
@@ -125,6 +125,14 @@ nav {
   color: white; 
   }
 
+  #text-doc{
+    margin: 40px;
+    padding: 1px;
+    background: linear-gradient(to right, rgba(3, 3, 3, 0.7), rgba(3, 3, 3, 0.7)); /* Adjust background opacity */
+    color: white;
+  }
+  
+
 .center {
     display: block;
     margin-left: auto;
@@ -202,6 +210,24 @@ img.resized-image {
     color: white;
 }
 
+.returnHomeDoc{
+  display: block;
+  margin-top: 100px;
+  margin-bottom: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+  height: 40px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #31c5d5;
+  border-radius: 10px;
+}
+
+.returnHomeDoc:hover{
+  background-color: #31c5d5;
+  color: white;
+}
 
 main{
     display:flex;
@@ -300,6 +326,32 @@ main{
 .pagination .current {
   background-color: #09c8de;
   color: rgb(3, 3, 3);
+}
+
+#pageInput {
+  padding: 1px;
+  border: 4px solid #31c5d5;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 10px;
+  width: 4%;
+  
+}
+#goToPage {
+  padding: 2px auto;
+  background-color: rgb(255, 255, 255); /* Green */
+  border: none;
+  color: rgb(3, 3, 3);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 200px;
+}
+#goToPage:hover {
+  background-color: #09c8de;
 }
 
 .addToWhishList{
@@ -502,3 +554,5 @@ main{
   display: block;
   margin: 100px auto;
 }
+
+
