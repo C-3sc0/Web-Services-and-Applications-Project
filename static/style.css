@@ -59,7 +59,7 @@ nav {
 }
 
 /* Styling HTML texts */
-#text, #MovieTitle {
+#text, #MovieTitle, #showTitle {
   text-align: center;
   margin: auto;
   width: 50%;
@@ -103,7 +103,7 @@ nav {
   width: 320px;
   margin:  0 auto 40px;
 }
-.startbutton, .MovieDB, .TVDB, .returnHome {
+.startbutton, .MovieDB, .TVDB {
   background-color: #31c5d5;
   border-radius: 100px;
   box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset,rgba(44, 187, 99, .15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,rgba(44, 187, 99, .15) 0 16px 32px;
@@ -121,15 +121,15 @@ nav {
   -webkit-user-select: none;
   touch-action: manipulation;
 }
-.startbutton:hover, .MovieDB:hover, .TVDB:hover, .returnHome:hover {
+.startbutton:hover, .MovieDB:hover, .TVDB:hover{
   box-shadow: rgba(44,187,99,.35) 0 -25px 18px -14px inset,rgba(44,187,99,.25) 0 1px 2px,rgba(44,187,99,.25) 0 2px 4px,rgba(44,187,99,.25) 0 4px 8px,rgba(44,187,99,.25) 0 8px 16px,rgba(44,187,99,.25) 0 16px 32px;
   transform: scale(1.05) rotate(-1deg);
 }
 
-.returnHomeDoc{
+.returnHomeDoc, .returnHome{
   display: block;
-  margin-top: 100px;
-  margin-bottom: 111px;
+  margin-top: 120px;
+  margin-bottom: 200px;
   margin-left: auto;
   margin-right: auto;
   width: 100px;
@@ -139,7 +139,7 @@ nav {
   border: 2px solid #31c5d5;
   border-radius: 10px;
 }
-.returnHomeDoc:hover{
+.returnHomeDoc:hover, .returnHome:hover {
   background-color: #31c5d5;
   color: white;
 }
@@ -168,6 +168,8 @@ nav {
 /* Styling about page img */
 img.resized-image {
   max-width: 30%;
+  display: block;
+  margin: 0 auto;
 }
 
 /* Styling movie and tv show main page */
@@ -182,7 +184,7 @@ main{
   display: flex;
   justify-content: center;
   padding: 10px;
-  margin: 20px 0;
+  margin: 40px 0;
 }
 .pagination .page,.current{
   margin: 0 5px;
@@ -312,7 +314,8 @@ main{
   border:0;
   border-radius: 50px;
   padding: 10px 20px;
-  margin-top: 20px;
+  margin-top: 50px;
+  margin-left:50px;
 }
 .table-header {
   background-color: #327a81;
