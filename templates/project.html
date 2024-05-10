@@ -1,69 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-<!-- Load an icon library -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <head>
+        <!-- Load an icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <meta charset="UTF-8" />
-        <link href="style.css" rel="stylesheet" />
+        <link href="static/style.css" rel="stylesheet" />
         <title>Movies</title>
     </head>
-    
-    <body>
-    
-        <h1 class="project">WSAA Project</h1>
-    
-    <!-- Navigation Bar -->
-    <header>
-        <nav>
-            <a href="#home" class="split" onclick="returnToHome()">Home</a>
-            <a href="#about" onclick="goToAbout()">About</a>
-            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
-            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
-            <a href="#Documentation">Documentation</a>
-        </nav>
-    </header>
+        <body>
+            <h1 class="h1Header">WSAA Project</h1>
+                <!-- Navigation Bar -->
+                <header>
+                    <div id="navbar-container">
+                        <nav>
+                            <a href="#home" class="nav-item active" onclick="returnToHome()">Home</a>
+                            <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
+                            <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
+                            <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
+                            <a href="#Wish List" class="nav-item" onclick="whishList()">Wish List</a>
+                            <a href="#Documentation" class="nav-item" onclick="goToDoc()">Documentation</a>
+                        </nav>
+                    </div>
+                </header>
         
-    <div id="text">
-        <h2>The Movie and TV show Homepage</h2>
-        <p><strong>Welcome to the Movie and TV Show Homepage, where your next favorite entertainment awaits!</strong></p>
-        <p><strong>Dive into a world of cinematic delight as you curate your watchlist with beloved classics and exciting new releases.</strong></p>
-        <p><strong>Ready to embark on a journey of discovery? Let's find the perfect movie or TV show to captivate your imagination.</strong></p>
-        <img src="images/movie.gif" alt="Movies" class="center" /></br></br>
-    </div>
-
-    <div class="button-pyramid">
-            <button class="startbutton">Your Watch List</button>
-    </div></br>
-        <div class="explore-buttons">
-                <button class="MovieDB" onclick="goToMDB()"> Explore movies</button>
-                <button class="TVDB"onclick="goToTv()"> Explore TV shows</button>
-        </div>
+                    <div id="text">
+                        <h2>The Movie and TV show Homepage</h2>
+                        <p>Welcome to the Movie and TV Show Homepage, where your next favorite entertainment awaits!</br></br>
+                            Dive into a world of cinematic delight as you curate your watchlist with beloved classics and exciting new releases.</br>
+                            Ready to embark on a journey of discovery? Let's find the perfect movie or TV show to captivate your imagination.</p>
+                        <img src="static/images/movie.gif" alt="Movies"/></br></br>
+                    </div>
+                    <div class="button-pyramid">
+                            <button class="startbutton" onclick="whishList()">Your Watch List</button>
+                    </div></br>
+                        <div class="explore-buttons">
+                                <button class="MovieDB" onclick="goToMDB()"> Explore movies</button>
+                                <button class="TVDB"onclick="goToTv()"> Explore TV shows</button>
+                        </div>
         
-    <footer class="footer2">
-        <p class = "Left">Author: Francesco Troja</p>
-        <a href="https://github.com/C-3sc0" target="_blank">
-        <i class="fa fa-github" style="font-size:50px"></i>
-        </a>
-    </footer> 
-    
-    </body>
-
-    <script> 
-        function returnToHome(){
-            window.location.href = 'project.html';
-        }
-        function goToAbout(){
-            window.location.href = 'about.html';
-        }
-        function goToMDB(){
-            window.location.href = 'movie.html';
-        }
-        function goToTv()
-        {
-            window.location.href = 'tv-show.html';
-    }
-        
-    </script>
+                        <footer class="footer">
+                            <p class = "Left">Author: Francesco Troja</p>
+                            <a href="https://github.com/C-3sc0" target="_blank">
+                            <i class="fa fa-github" style="font-size:50px"></i>
+                            </a>
+                        </footer> 
+                            <script>
+                                // Functions to redirect the user to different pages
+                                function returnToHome(){
+                                    window.location.href = '/';
+                                }
+                                function goToAbout(){
+                                    window.location.href = '/about';
+                                }
+                                function goToMDB(){
+                                    window.location.href = '/movie';
+                                }
+                                function goToTv(){
+                                    window.location.href = '/tv-show';
+                                }
+                                function whishList(){
+                                    window.location.href = '/wish-list';
+                                }
+                                function goBack(){
+                                    window.location.href = '/movie';
+                                }
+                                function goToDoc(){
+                                window.location.href = '/documentation';
+                                }
+                            </script>
+        </body>
 </html>
 
