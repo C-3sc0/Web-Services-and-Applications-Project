@@ -1,81 +1,85 @@
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
-        <link href="style.css" rel="stylesheet" />
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/style.css" rel="stylesheet" />
     </head>
-    <div class="about-section">
-    <title>About</title>
-    </div>
-
-    <body> 
-
-        <h1 class="about">About</h1>
-
-    <header>
-        <nav>
-            <a href="#home" class="split" onclick="returnToHome()">Home</a>
-            <a href="#about" onclick="goToAbout()">About</a>
-            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
-            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
-            <a href="#Documentation">Documentation</a>
-        </nav>
-    </header>
-
-    <div>       
-        <img src="images/project-scope.jpeg" alt="Project" class="center resized-image" /></br>
-    </div> 
-    
-    <div id="text">
-            <p>Welcome to the project scope page. Here, we will outline the project's objectives 
-                and detail the essential tasks required for its successful completion.</p></br>
-            <h3>1. Project Description</h3></br>
-            <p>The primary objective of this project is to develop a robust program demonstrating expertise in building 
-                and utilizing RESTful APIs. This will be achieved by creating a web application using the Flask framework, 
-                which will feature a RESTful API linked to one or more database tables. Furthermore, the project involves 
-                designing web pages that can interact with the API, facilitating CRUD (Create, Read, Update, Delete) 
-                operations on the data. Through this endeavor, the aim is to showcase a comprehensive understanding of 
-                RESTful API development and its application within a web-based environment.</p></br>
-            <h3>2. Handup</h3></br>
-            <p>To successfully complete the project, the following items are required:</p></br>
-            <p>1. <strong>GitHub Repository Link</strong>: This should contain the project code and only the relevant project files.</p>
-            <p>2. <strong>ReadMe File</strong>: If there are any specific instructions or requirements needed to run the code, they 
-                should be clearly outlined in the ReadMe file.</p></br>
-            <p>3. <strong>Hosting Information</strong>: While hosting the server on a cloud hosting site like Azure or Pythonanywhere 
-                is optional, if you choose to do so, please provide the link to the hosted application in the ReadMe file.</p></br>
-            <p>4. <strong>Additional Documentation</strong>: Include any other documentation that you deem necessary or helpful for 
-                understanding and working with the project.</p></br></br></br>
-        </div>               
-                
-        <div>
-            <button class="returnHome" onclick="returnToHome()"> Return Home</button>
+        <div class="about-section">
+            <title>About</title>
         </div>
+            <body> 
+                <h1 class="h1Header">About</h1>
+                <header>
+                    <div id="navbar-container">
+                        <nav>
+                            <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
+                            <a href="#about" class="nav-item active" onclick="goToAbout()">About</a>
+                            <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
+                            <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
+                            <a href="#Wish List" class="nav-item" onclick="whishList()">Wish List</a>
+                            <a href="#Documentation" class="nav-item" onclick="goToDoc()">Documentation</a>
+                        </nav>
+                    </div>
+                </header>
+                    <div>       
+                        <img src="static/images/project-scope.jpeg" alt="Project" class="center resized-image" /></br>
+                    </div> 
+                        <div id="text-about">
+                         <p>Welcome to the project scope page. Here, we will outline the project's objectives 
+                             and detail the essential tasks required for its successful completion.</br></br>
+                             <strong>1. Project Description</strong></br></br>
+                             The primary objective of this project is to develop a robust program demonstrating expertise in building 
+                             and utilizing RESTful APIs. This will be achieved by creating a web application using the Flask framework, 
+                             which will feature a RESTful API linked to one or more database tables. Furthermore, the project involves 
+                             designing web pages that can interact with the API, facilitating CRUD (Create, Read, Update, Delete) 
+                             operations on the data. Through this endeavor, the aim is to showcase a comprehensive understanding of 
+                             RESTful API development and its application within a web-based environment.</br></br>
+                             <strong>2. Handup</strong></br></br>
+                             To successfully complete the project, the following items are required:</br>
+                             1. <strong>GitHub Repository Link</strong>: This should contain the project code and only the relevant project files.</br>
+                             2. <strong>ReadMe File</strong>: If there are any specific instructions or requirements needed to run the code, they 
+                             should be clearly outlined in the ReadMe file.</br>
+                             3. <strong>Hosting Information</strong>: While hosting the server on a cloud hosting site like Azure or Pythonanywhere 
+                             is optional, if you choose to do so, please provide the link to the hosted application in the ReadMe file.</br>
+                             4. <strong>Additional Documentation</strong>: Include any other documentation that you deem necessary or helpful for 
+                             understanding and working with the project.
+                         </p></br>
+                        </div>               
+                            <div>
+                                <button class="returnHome" onclick="returnToHome()"> Return Home</button>
+                            </div>
+                                <footer class="footer">
+                                    <p class = "Left">Author: Francesco Troja</p>
+                                    <a href="https://github.com/C-3sc0" target="_blank">
+                                    <i class="fa fa-github" style="font-size:50px"></i>
+                                    </a>
+                                </footer> 
+                                    <script>
+                                        // Functions to redirect the user to different pages
+                                        function returnToHome(){
+                                            window.location.href = '/';
+                                        }
+                                        function goToAbout(){
+                                            window.location.href = '/about';
+                                        }
+                                        function goToMDB(){
+                                            window.location.href = '/movie';
+                                        }
+                                        function goToTv(){
+                                            window.location.href = '/tv-show';
+                                        }
+                                        function whishList(){
+                                            window.location.href = '/wish-list';
+                                        }
+                                        function goBack(){
+                                            window.location.href = '/movie';
+                                        }
+                                        function goToDoc(){
+                                        window.location.href = '/documentation';
+                                        }
+                                    </script>
 
-                <footer class="footer2">
-                    <p class = "Left">Author: Francesco Troja</p>
-                    <a href="https://github.com/C-3sc0" target="_blank">
-                    <i class="fa fa-github" style="font-size:50px"></i>
-                    </a>
-                </footer>
-
-
-    </body>
-
-    <script>
-        function returnToHome(){
-            window.location.href = 'project.html';
-        }
-        function goToAbout(){
-            window.location.href = 'about.html';
-        }
-        function goToMDB(){
-            window.location.href = 'movie.html';
-        }
-        function goToTv()
-        {
-            window.location.href = 'tv-show.html';
-    }
-    </script>
-
+            </body>
 </html>
