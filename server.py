@@ -67,6 +67,7 @@ def wishlist(id):
                 return jsonify({"movie": movie}), 200
             else:
                 return jsonify({"message": "Movie not found in wishlist"}), 404
+
         # Add a new movie to the wishlist
         elif request.method == 'POST':
             movie = request.get_json()
@@ -80,24 +81,24 @@ def wishlist(id):
             session['wishlist'] = wishlist
             cnx.commit()
             return jsonify({"message": "Movie added to wishlist", "movie": movie}), 200
-            # Delete the movie from the wishlist table
+
+        # Delete the movie from the wishlist table
         elif request.method == 'DELETE':
-            delete_movie_from_wishlist = ("DELETE FROM movie WHERE id = %s")
-            cursor.execute(delete_movie_from_wishlist, (id,))
-            cnx.commit()
-
             deleted_movie = next((item for item in wishlist if item['id'] == id), None)
-            wishlist = [item for item in wishlist if item['id'] != id]
-            session['wishlist'] = wishlist
-
             if deleted_movie:
-                return jsonify({"message": "Movie deleted from wishlist", "movie": deleted_movie}), 200
+                delete_movie_from_wishlist = ("DELETE FROM movie WHERE id = %s")
+                cursor.execute(delete_movie_from_wishlist, (id,))
+                cnx.commit()
+                wishlist = [item for item in wishlist if item['id'] != id]
+                session['wishlist'] = wishlist
+                return jsonify({"message": "Movie deleted from wishlist"}), 200
             else:
                 return jsonify({"message": "Movie not found in wishlist"}), 404
 
     except Exception as e:
-        print("Error:", e)
-        return jsonify({"message": "An error occurred"}), 500
+        # Handle exceptions appropriately
+        return jsonify({"message": str(e)}), 500
+
 
 @app.route("/wish-list")
 def wish_list():
@@ -252,9 +253,9 @@ def update_tv_show_wishlist(id):
         print("Error:", e)
         return jsonify({"message": "An error occurred"}), 500
 
-#@app.route("/documentation")
-#def doc():
-#    return render_template("documentation.html")
+@app.route("/documentation")
+def doc():
+    return render_template("documentation.html")
 
 if __name__ == "__main__":
     app.run(debug = True)
