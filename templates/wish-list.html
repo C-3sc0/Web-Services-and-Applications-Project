@@ -9,7 +9,7 @@
         <title>Wish List</title>
     </head>
         <body>
-            <h1 class="tmdb">Wish List</h1>
+            <h1 class="h1Header">Wish List</h1>
                 <header>
                     <div id="navbar-container">
                         <nav>
@@ -18,11 +18,11 @@
                             <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
                             <a href="#TV show database" class="nav-item" onclick="goToTv()">TV show Database</a>
                             <a href="#Wish List" class="nav-item active" onclick="whishList()">Wish List</a>
-                            <a href="#Documentation" class="nav-item">Documentation</a>
+                            <a href="#Documentation" class="nav-item" onclick="goToDoc()">Documentation</a>
                         </nav>
                     </div>
                 </header>
-                    <div class="table-users">
+                    <div id= "tableUser" class="table-users">
                     <div class="table-header">Movies</div>
                         
                     <!-- Wishlist table for Movie Database-->
@@ -41,7 +41,7 @@
                     </div></br></br></br>
          
                         <div id="updateForm" style="display: none;">
-                            <h4>Please Enter a new Movie Title below:</h4>
+                            <h4 id="MovieTitle">Please Enter a new Movie Title below:</h4>
                             <input type="text" id="newTitle" placeholder="Movie title">
                             <input type="text" id="newPosterPath" placeholder="poster path" style="display: none">
                             <button id="updateButton">Update Movie</button></br></br>
@@ -49,7 +49,7 @@
                         </div>
                         
                             <!-- Wishlist table for TV-Show Database-->
-                            <div class="table-users">
+                            <div id= "tableUserTv" class="table-users-tv">
                             <div class="table-header">Tv show</div>
                             
                             <table cellspacing="0" id="tvShowTable">
@@ -66,7 +66,7 @@
                             </table>
                             </div>
                             <div id="TvShowUpdateForm" style="display: none;">
-                                <h4>Please Enter a new Tv show Title below:</h4>
+                                <h4 id="showTitle">Please Enter a new Tv show Title below:</h4>
                                 <input type="text" id="newShowTitle" placeholder="Tv show title">
                                 <input type="text" id="newShowPosterPath" placeholder="poster path" style="display: none">
                                 <button id="updateShowButton">Update Tv show</button></br></br>
@@ -75,12 +75,13 @@
          
                                 <footer class="footer"> 
                                     <p class = "Left">Author: Francesco Troja</p>
-                                    <img src="static/images/tmdblogo.png" alt="The Movie Database (TMDB)" width="100" height="90">
-                                    <span>&copy; 2024 The Movie Database (TMDB)</span>
+                                    <div class="center-content">
+                                        <img src="static/images/tmdblogo.png" alt="The Movie Database (TMDB)" width="100" height="90">
+                                        <span>&copy; 2024 The Movie Database API (TMDB)</span>
+                                    </div>
                                     <a href="https://github.com/C-3sc0" target="_blank">
                                     <i class="fa fa-github" style="font-size:50px"></i>
                                     </a>
-
                                 </footer> 
         
                                     <script>
@@ -102,6 +103,9 @@
                                      }
                                      function goBack(){
                                          window.location.href = '/movie';
+                                     }
+                                     function goToDoc(){
+                                         window.location.href = '/documentation';
                                      }
 
                                  
@@ -164,10 +168,10 @@
                                          const rowIndex = index - 1;
 
                                          $.ajax({
-                                             url: '/get-wishlist',
-                                             type: 'GET',
-                                             dataType: 'json',
-                                             success: function(wishlistData) {
+                                             "url": '/get-wishlist',
+                                             "type": 'GET',
+                                             "dataType": 'json',
+                                             "success": function(wishlistData) {
                                                  console.log('Wishlist data:', wishlistData);
                                                  const wishlist = wishlistData.wishlist;
                                                  console.log('Wishlist:', wishlist);
@@ -180,16 +184,16 @@
 
                                                          // Send DELETE request to server with only the movie ID
                                                          $.ajax({
-                                                             url: `/wish-list/${movieIdToDelete}`,
-                                                             type: 'DELETE',
-                                                             dataType: 'json',
-                                                             data: JSON.stringify({ id: movieIdToDelete }), 
-                                                             contentType: 'application/json',
-                                                             success: function(response) {
+                                                             "url": `/wish-list/${movieIdToDelete}`,
+                                                             "type": 'DELETE',
+                                                             "dataType": 'json',
+                                                             "data": JSON.stringify({ id: movieIdToDelete }), 
+                                                             "contentType": 'application/json',
+                                                             "success": function(response) {
                                                                  console.log(response);
                                                                  tableElement.deleteRow(rowIndex);
                                                              },
-                                                             error: function(jqXHR, textStatus, errorThrown) {
+                                                             "error": function(jqXHR, textStatus, errorThrown) {
                                                                  console.error('Error:', textStatus, errorThrown);
                                                                  console.error('Response:', jqXHR.responseText);
                                                              }
@@ -201,25 +205,29 @@
                                                      console.error('Invalid row index or wishlist data:', rowIndex, wishlist);
                                                  }
                                              },
-                                             error: function(error) {
+                                             "error": function(error) {
                                                  console.error('Error:', error);
                                              }
                                          });
                                      }
                                  
-                                     // Function to update the movie i the wishlist
+                                     // Function to update the movie in the wishlist
                                      function doUpdate(movieId) {
                                          const updateForm = document.getElementById('updateForm');
                                          const updateButton = document.getElementById('updateButton');
-                                         const movieTableBody = document.getElementById('movieTableBody');
-
+                                         const tableUser = document.getElementById('tableUser');
+                                         const tableUserTv = document.getElementById('tableUserTv');
 
                                          updateForm.style.display = 'block';
-                                         movieTableBody.style.display = 'none';
+                                         tableUser.style.display = 'none';
+                                         tableUserTv.style.display = 'none';
 
                                          updateButton.addEventListener('click', function () {
-                                             searchMovie(movieId);
-                                         });
+                                            const searchInput = document.getElementById('newTitle');
+                                            if (searchInput.value.trim() !== "") { // Check if search input is not empty
+                                            searchMovie(movieId);
+                                            }
+                                        });
                                      }
 
                                      // Function to search for a movie based on user input
@@ -261,7 +269,7 @@
                                         
                                          }));
                                      
-                                         const movieIndex = prompt("Select the movie you want to update:\n" +
+                                         const movieIndex = prompt("Select an option number from the list below:\n" +
                                              movieOpt.map((movie, index) => `${index + 1}. ${movie.title}`).join('\n'));
                                      
                                          if (movieIndex && movieIndex >= 1 && movieIndex <= movieSearch.length) {
@@ -273,48 +281,42 @@
                                  
                                      // Function to update new movie in wishlist
                                      function updateMovieInWishlist(oldMovieId, newMovieId, newTitle, newPoster, newOverview, newvote) {
-                                        
-                                         // Send a PUT request to the Flask server with the updated movie details
-                                         fetch(`/wish-list/${oldMovieId}`, {
-                                             method: 'PUT',
-                                             headers: {
-                                                 'Content-Type': 'application/json',
-                                             },
-                                             body: JSON.stringify({
-                                                 id: newMovieId,
-                                                 title: newTitle,
-                                                 poster_path: newPoster,
-                                                 overview: newOverview,
-                                                 vote_average: newvote,
-                                             }),
-                                         })
-                                         .then(response => response.json())
-                                         .then(data => {
-                                             if (data.message === "Movie updated in wishlist") {
-                                                 // Get the table row for the updated movie
-                                                 
-                                                 const row = document.getElementById(`movie-${oldMovieId}`);
-
-                                                 // Update the title and poster path cells in the row
-                                                 row.querySelector('.id').textContent = newMovieId;
-                                                 row.querySelector('.title').textContent = newTitle;
-                                                 row.querySelector('.poster_path').src = newPoster;  
-
-                                                 window.location.reload();
-                                                 
-
-                                             } else {
-                                                 console.error(data.message);
-                                             }
-                                         })
-                                         .catch((error) => {
-                                             console.error('Error:', error);
-                                         });
-                                     
-                                     } 
+                                        // Send a PUT request to the Flask server with the updated movie details
+                                        $.ajax({
+                                            "url": `/wish-list/${oldMovieId}`,
+                                            "method": 'PUT',
+                                            "contentType": 'application/json',
+                                            "data": JSON.stringify({
+                                                id: newMovieId,
+                                                title: newTitle,
+                                                poster_path: newPoster,
+                                                overview: newOverview,
+                                                vote_average: newvote,
+                                            }),
+                                            "success": function(data) {
+                                                if (data.message === "Movie updated in wishlist") {
+                                                    // Get the table row for the updated movie
+                                                    const row = $(`#movie-${oldMovieId}`);
+                                                
+                                                    // Update the title and poster path cells in the row
+                                                    row.find('.id').text(newMovieId);
+                                                    row.find('.title').text(newTitle);
+                                                    row.find('.poster_path').attr('src', newPoster);
+                                                
+                                                    // Reload the page to reflect changes
+                                                    location.reload();
+                                                } else {
+                                                    console.error(data.message);
+                                                }
+                                            },
+                                            "error": function(jqXHR, textStatus, errorThrown) {
+                                                console.error('Error:', errorThrown);
+                                            }
+                                        });
+                                     }
                                      
 
-                                     // Below all the functions for the movie wishlist will be displayed 
+                                     // Below all the functions for the tv show wishlist will be displayed 
                                      document.addEventListener('DOMContentLoaded', function () {
                                      fetch('/get_tvshow_wishlist')
                                      .then(response => response.json())
@@ -345,6 +347,8 @@
                                          <td class="poster_path"><img src="${IMG_URL + tvShow.poster_path}" alt="${tvShow.name}" style="max-width: 150px; max-height: 150px;"></td>
                                          <td><button class="updateBut" onclick="doUpdateShow(${tvShow.id})">Update</button></td>
                                          <td><button class="deleteBut" onclick="doDeleteShow(this)">Delete</button></td>
+                                         <td style="display: none;">${tvShow.overview}</td>
+                                         <td style="display: none;">${tvShow.vote_average}</td>
                                          `;
                                          return tvShowtableRow;
                                      }
@@ -369,10 +373,10 @@
                                          const rowIndex = index - 1;
 
                                          $.ajax({
-                                             url: '/get_tvshow_wishlist',
-                                             type: 'GET',
-                                             dataType: 'json',
-                                             success: function(tvShowwishlistData) {
+                                             "url": '/get_tvshow_wishlist',
+                                             "type": 'GET',
+                                             "dataType": 'json',
+                                             "success": function(tvShowwishlistData) {
                                                  console.log('Wishlist data:', tvShowwishlistData);
                                                  const tvShowwishlist = tvShowwishlistData.tvShowwishlist;
                                                  console.log('Wishlist:', tvShowwishlist);
@@ -385,16 +389,16 @@
 
                                                          // Send DELETE request to server with only the movie ID
                                                          $.ajax({
-                                                             url: '/add_delete_wishlist/tv-show',
-                                                             type: 'DELETE',
-                                                             dataType: 'json',
-                                                             data: JSON.stringify({ id: tvShowIdToDelete }), 
-                                                             contentType: 'application/json',
-                                                             success: function(response) {
+                                                             "url": `/wish-list/tv-show/${tvShowIdToDelete}`,
+                                                             "type": 'DELETE',
+                                                             "dataType": 'json',
+                                                             "data": JSON.stringify({ id: tvShowIdToDelete }), 
+                                                             "contentType": 'application/json',
+                                                             "success": function(response) {
                                                                  console.log(response);
                                                                  tableElement.deleteRow(rowIndex);
                                                              },
-                                                             error: function(jqXHR, textStatus, errorThrown) {
+                                                             "error": function(jqXHR, textStatus, errorThrown) {
                                                                  console.error('Error:', textStatus, errorThrown);
                                                                  console.error('Response:', jqXHR.responseText);
                                                              }
@@ -406,7 +410,7 @@
                                                      console.error('Invalid row index or wishlist data:', rowIndex, tvShowwishlist);
                                                  }
                                              },
-                                             error: function(error) {
+                                             "error": function(error) {
                                                  console.error('Error:', error);
                                              }
                                          });
@@ -415,14 +419,19 @@
                                      function doUpdateShow(tvShowId) {
                                          const TvShowUpdateForm = document.getElementById('TvShowUpdateForm');
                                          const updateShowButton = document.getElementById('updateShowButton');
-                                         const tvShowTableBody = document.getElementById('tvShowTableBody');
+                                         const tableUser = document.getElementById('tableUser');
+                                         const tableUserTv = document.getElementById('tableUserTv');
 
 
                                          TvShowUpdateForm.style.display = 'block';
-                                         tvShowTableBody.style.display = 'none';
+                                         tableUser.style.display = 'none';
+                                         tableUserTv.style.display = 'none';
 
                                          updateShowButton.addEventListener('click', function () {
+                                            const searchShowInput = document.getElementById('newShowTitle')
+                                            if (searchShowInput.value.trim() !== ""){
                                              searchTvShow(tvShowId);
+                                            }
                                          });
                                      }
 
@@ -445,7 +454,7 @@
                                                 tvShowIdInput.value = selectedShow.id;
 
                                                  // Update the movie in the wishlist
-                                                 updateTvShowInWishlist(tvShowId, selectedShow.id, selectedShow.name, selectedShow.poster_path);
+                                                 updateTvShowInWishlist(tvShowId, selectedShow.id, selectedShow.name, selectedShow.poster_path, selectedShow.overview, selectedShow.vote_average);
                                              } else {
                                                  alert("No Tv show selected or found.");
                                              }
@@ -459,10 +468,12 @@
                                          const tvShowOpt = tvShowSearch.map(tvShow => ({
                                              id: tvShow.id,
                                              name: tvShow.name,
-                                             poster_path: tvShow.poster_path
+                                             poster_path: tvShow.poster_path,
+                                             overview: tvShow.overview,
+                                             vote_average: tvShow.vote_average
                                          }));
                                      
-                                         const tvShowIndex = prompt("Select the Tv show you want to update:\n" +
+                                         const tvShowIndex = prompt("Select an option number from the list below:\n" +
                                          tvShowOpt.map((tvShow, index) => `${index + 1}. ${tvShow.name}`).join('\n'));
                                      
                                          if (tvShowIndex && tvShowIndex >= 1 && tvShowIndex <= tvShowSearch.length) {
@@ -473,40 +484,40 @@
                                      }
                                  
                                      // Function to update new movie in wishlist
-                                     function updateTvShowInWishlist(oldTvShowId, newTvShowId, newShowTitle, newShowPosterPath) {
+                                     function updateTvShowInWishlist(oldTvShowId, newTvShowId, newShowTitle, newShowPosterPath,newShowOverview, newShowVote) {
                                          // Send a PUT request to the Flask server with the updated movie details
-                                         fetch(`/update_tv_show_wishlist/${oldTvShowId}`, {
-                                             method: 'PUT',
-                                             headers: {
-                                                 'Content-Type': 'application/json',
-                                             },
-                                             body: JSON.stringify({
+                                         $.ajax({
+                                            "url": `/update_tv_show_wishlist/${oldTvShowId}`,
+                                            "method": 'PUT',
+                                            "contentType": 'application/json',
+                                            "data": JSON.stringify({
                                                  id: newTvShowId,
                                                  name: newShowTitle,
                                                  poster_path: newShowPosterPath,
+                                                 overview: newShowOverview,
+                                                 vote_average: newShowVote,
                                              }),
-                                         })
-                                         .then(response => response.json())
-                                         .then(data => {
-                                             if (data.message === "Tv Show updated in wishlist") {
+                                             "success": function(data) {
+                                                if (data.message === "Tv Show updated in wishlist") {
                                                  // Get the table row for the updated movie
-                                                 const row = document.getElementById(`tvShow-${oldTvShowId}`);
+                                                 const row = $(`#tvShow-${oldTvShowId}`);
 
                                                  // Update the title and poster path cells in the row
-                                                 row.querySelector('.id').textContent = newTvShowId;
-                                                 row.querySelector('.name').textContent = newShowTitle;
-                                                 row.querySelector('.poster_path').src = newShowPosterPath;  
-                                                 window.location.reload();
+                                                 row.find('.id').text(newTvShowId);
+                                                 row.find('.name').text(newShowTitle);
+                                                 row.find('.poster_path').attr('src', newShowPosterPath);  
+                                                 
+                                                 location.reload();
 
                                              } else {
                                                  console.error(data.message);
                                              }
-                                         })
-                                         .catch((error) => {
-                                             console.error('Error:', error);
-                                         });
-                                     
-                                     }    
+                                         },
+                                         "error": function(jqXHR, textStatus, errorThrown) {
+                                                console.error('Error:', errorThrown);
+                                            }
+                                        });
+                                     }
                                     </script>
         </body>
 </html>
