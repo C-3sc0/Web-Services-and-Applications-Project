@@ -1,101 +1,244 @@
 <!DOCTYPE html>
-
 <html lang="en">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/style.css" rel="stylesheet" />
+        <title>TV Show Database</title>
+    </head>
+        <body>
+            <h1 class="h1Header"> TV Show Database</h1>
+            <header>
+                <div id="navbar-container">
+                    <nav>
+                        <a href="#home" class="nav-item" onclick="returnToHome()">Home</a>
+                        <a href="#about" class="nav-item" onclick="goToAbout()">About</a>
+                        <a href="#Movie database" class="nav-item" onclick="goToMDB()">Movie Database</a>
+                        <a href="#TV show database" class="nav-item active" onclick="goToTv()">TV show Database</a>
+                        <a href="#Wish List" class="nav-item" onclick="whishList()">Wish List</a>
+                        <a href="#Documentation" class="nav-item" onclick="goToDoc()">Documentation</a>
+                    </nav>
+                    <form id="form">
+                        <input type="text" placeholder="Search.." id="search" class="search-box">
+                    </form>
+                </div>
+            </header>
+                <main id="main"> </main>
+                    <div class="pagination">
+                        <div class="page" id="prev">Previous page</div>
+                        <div class="current" id="curr" style="display: none"></div>
+                        <input type="number" id="pageInput" min="1" max="500">
+                        <button id="goToPage">Go</button>
+                        <div class="page" id="next">Next page</div>
+                    </div>
+                        <footer class="footer"> 
+                            <p class = "Left">Author: Francesco Troja</p>
+                            <div class="center-content">
+                                <img src="static/images/tmdblogo.png" alt="The Movie Database (TMDB)" width="100" height="90">
+                                <span>&copy; 2024 The Movie Database API (TMDB)</span>
+                            </div>
+                            <a href="https://github.com/C-3sc0" target="_blank">
+                            <i class="fa fa-github" style="font-size:50px"></i>
+                            </a>
+                        </footer>
+                            <script>
+                                // Functions to redirect the user to different pages
+                                function returnToHome(){
+                                    window.location.href = '/';
+                                }
+                                function goToAbout(){
+                                    window.location.href = '/about';
+                                }
+                                function goToMDB(){
+                                    window.location.href = '/movie';
+                                }
+                                function goToTv(){
+                                    window.location.href = '/tv-show';
+                                }
+                                function whishList(){
+                                    window.location.href = '/wish-list';
+                                }
+                                function goBack(){
+                                    window.location.href = '/movie';
+                                }
+                                function goToDoc(){
+                                window.location.href = '/documentation';
+                                }
+                                //API TV show Details
+                                const API_KEY = 'api_key=fa4eda4583d591db539b12271967147a';
+                                const BASE_URL = 'https://api.themoviedb.org/3';
+                                const API_URL = BASE_URL + '/trending/tv/week?language=en-US&'+API_KEY;
+                                const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+                                const searchURL = BASE_URL + '/search/tv?'+API_KEY;
 
-<head>
-    <meta charset="UTF-8">
-    <link href="style.css" rel="stylesheet" />
-    <title>TV Show Database</title>
-</head>
-<body>
-    <h1 class="tmdb"> TV Show Database</h1>
+                                const main = document.getElementById('main');
+                                const form = document.getElementById('form');
+                                const search = document.getElementById('search');
 
-    <header>
-        <nav>
-            <a href="#home" class="split" onclick="returnToHome()">Home</a>
-            <a href="#about" onclick= "goToAbout()">About</a>
-            <a href="#Movie database" onclick="goToMDB()"> Movie Database</a>
-            <a href="#TV show database" onclick="goToTv()"> TV show Database</a>
-            <a href="#Documentation">Documentation</a>
-        </nav>
-    </header>
-    <main id="main"> </main>
+                                const prev = document.getElementById('prev');
+                                const current = document.getElementById('curr');
+                                const next = document.getElementById('next');
 
-    <footer>
-        <p class = "Left">Author: Francesco Troja</p>
-        <a href="https://github.com/C-3sc0" target="_blank">
-        <i class="fa fa-github" style="font-size:50px"></i>
-        </a>
-    </footer> 
-
-       <script>
-        
-        function returnToHome(){
-            window.location.href = 'project.html';
-        }
-        function goToAbout(){
-            window.location.href = 'about.html';
-        }
-        function goToMDB(){
-            window.location.href = 'movie.html';
-        }
-        function goToTv(){
-            window.location.href = 'tv-show.html';
-        }
-
-        const API_KEY = 'api_key=fa4eda4583d591db539b12271967147a';
-        const BASE_URL = 'https://api.themoviedb.org/3';
-        const API_URL = BASE_URL + '/trending/tv/week?language=en-US&'+API_KEY;
-        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-
-        const main = document.getElementById('main');
-
-        getTvShow(API_URL)
-
-        function getTvShow(url){
-            fetch(url).then(res => {
-                console.log(res.headers.get('Content-Type'));
-                console.log(res.headers.get('Date'));
-                 return res.json();
-            }).then(data => {
-                console.log(data.result);
-                showTvShow(data.results);
-            })
-        }
-
-        function showTvShow(data){
-                main.innerHTML = '';
-                data.forEach(tvShow => {
-                    const{name,poster_path,vote_average,overview} = tvShow;
-                    console.log(name, vote_average);                     
-                    const tvShowEl = document.createElement("div");
-                    tvShowEl.classList.add("movie");
-                    tvShowEl.innerHTML = `
-                        <img src="${IMG_URL+poster_path}" alt="${name}">
-                        <div class= "movie-info">
-                            <h3>${name}</h3>
-                            <span class="${getColor(vote_average)}"> ${vote_average}</span>
-                        </div>
-
-                        <div class="overview">
-                            <h3>overview</h3>
-                            ${overview}
-                        </div>                
-                    `
-                    main.appendChild(tvShowEl);
-                })
-        }
-
-        function getColor(vote){
-            if(vote>= 8){
-                return 'green'
-            }else if(vote >= 5){
-                return "orange"
-            }else{
-                return 'red'
-            }
-        }
-       </script>
-</body>
+                                var currentPage = 1;
+                                var nextPage = 2;
+                                var previousPAge = 3;
+                                var lastUrl = '';
+                                var totalPages = 500;
+                
+                                getTvShow(API_URL)
+                
+                                // Fetching movies from the API
+                                function getTvShow(url){
+                                    lastUrl = url;
+                                    $.ajax({
+                                        "url": url,
+                                        "method": "GET",
+                                        "url": url,
+                                        "dataType": "JSON",
+                                        "success": function(data) {
+                                            // Display movies if data is available
+                                            if (data.results.length !== 0){
+                                                showTvShow(data.results);
+                                                console.log(data.results)
+                                                currentPage = data.page;
+                                                nextPage = currentPage + 1;
+                                                previousPAge = currentPage - 1;
+                                                totalPages = data.total_pages;
+                                            
+                                                current.innerHTML = currentPage;
+                                                document.getElementById('pageInput').value = currentPage;
+                                                if(currentPage <= 1){
+                                                    prev.classList.add('disabled');
+                                                    next.classList.remove('disabled');
+                                                }else if (currentPage >= totalPages) {
+                                                    prev.classList.remove('disabled');
+                                                    next.classList.add('disabled');
+                                                }else{
+                                                    prev.classList.remove('disabled');
+                                                    next.classList.remove('disabled');
+                                                }
+                                            
+                                                search.scrollIntoView({behavior : 'smooth'})
+                                            }else{
+                                                main.innerHTML=`
+                                                    <div class="noFoundPage">
+                                                    <img class= "noFoundImg" src="static/images/no_result.png" alt="No results found">
+                                                    <p id="noMovieAvailable"> Try to search another Movie </p>
+                                                    </div>
+                                                `
+                                                document.querySelector('.pagination').style.display = 'none';
+                                            }
+                                        },
+                                        "error": function(error) {
+                                            console.log('Error: ', error);
+                                        }
+                                    });
+                                }
+                                
+                                function showTvShow(data){
+                                main.innerHTML = '';
+                                data.forEach(tvShow => {
+                                    const{id,name,poster_path,vote_average,overview} = tvShow;
+                                    const roundedVoteAverage = vote_average.toFixed(1); // round to 1 decimal place
+                                    console.log(id,name);                     
+                                    const tvShowEl = document.createElement("div");
+                                    tvShowEl.classList.add("movie");
+                                    tvShowEl.innerHTML = `
+                                    <img src="${poster_path? IMG_URL + poster_path: "https://placehold.co/1080x1580?text=Poster+Not+Found"}" alt="${name}">
+                                    <div class= "movie-info">
+                                        <h3>${name}</h3>
+                                        <span class="${getColor(roundedVoteAverage)}"> ${roundedVoteAverage}</span>
+                                    </div>
+                                    <div class="overview">
+                                        <h3>overview</h3>
+                                        ${overview? overview: "No overview available"}</br>
+                                        <button class="addToWhishList" id=${id}>Add to Whish List</button> 
+                                    </div>                
+                                    `
+                                    main.appendChild(tvShowEl);
+                            
+                                    $('#' + id).click(() => {
+                                        const tvShowId = id
+                                        $.ajax({
+                                    url: `/wish-list/tv-show/${tvShowId}`,
+                                    method: 'POST',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify(tvShow),
+                                    success: function(response) {
+                                        console.log("The TV show has been added to the wishlist, check it out");
+                                    },
+                                    error: function(xhr, textStatus, errorThrown) {
+                                        if (xhr.status === 409) {
+                                            console.log("TV show already in wishlist, try to add another TV show");
+                                        } else {
+                                            console.error('Error:', errorThrown);
+                                        }
+                                    }
+                                        });
+                                    });
+                                })
+                                }
+            
+                                function getColor(vote){
+                                    if(vote>= 8){
+                                        return 'green'
+                                    }else if(vote >= 5){
+                                        return "orange"
+                                    }else{
+                                        return 'red'
+                                    }
+                                }
+            
+                                form.addEventListener('submit', (e) =>{
+                                    e.preventDefault();
+                                
+                                    const searchTerm = search.value;
+                                    if(searchTerm){
+                                        getTvShow(searchURL+'&query='+searchTerm)
+                                    }else {
+                                        getTvShow(API_URL)
+                                    }
+                                })
+            
+                                prev.addEventListener('click', () =>{
+                                    if (previousPAge > 0){
+                                        pageCall(previousPAge);
+                                    }
+                                })
+                            
+                                next.addEventListener('click', () =>{
+                                    if (nextPage <= totalPages){
+                                        pageCall(nextPage);
+                                    }
+                                })
+                            
+                                function pageCall(page){
+                                    let urlSplit = lastUrl.split('?');
+                                    let queryParams = urlSplit[1].split('&');
+                                    let key = queryParams[queryParams.length - 1].split('=');
+                                    if (key[0] != 'page'){
+                                        let url = lastUrl + '&page=' + page
+                                        getTvShow(url)
+                                    }else{
+                                        key[1] = page.toString();
+                                        let a = key.join('=');
+                                        queryParams[queryParams.length - 1] = a;
+                                        let b = queryParams.join('&');
+                                        let url = urlSplit[0] +'?'+b
+                                        getTvShow(url);
+                                    }
+                                }
+                                const goToPageButton = document.getElementById('goToPage');
+                                const pageInput = document.getElementById('pageInput');
+            
+                                goToPageButton.addEventListener('click', () => {
+                                    const pageNumber = parseInt(pageInput.value);
+                                    if (pageNumber && pageNumber >= 1 && pageNumber <= totalPages) {
+                                    pageCall(pageNumber);
+                                    }
+                                });
+               </script>
+        </body>
 </html>
