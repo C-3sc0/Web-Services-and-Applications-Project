@@ -137,48 +137,63 @@
                                     });
                                 }
                                 
-                                function showTvShow(data){
-                                main.innerHTML = '';
-                                data.forEach(tvShow => {
-                                    const{id,name,poster_path,vote_average,overview} = tvShow;
-                                    const roundedVoteAverage = vote_average.toFixed(1); // round to 1 decimal place
-                                    console.log(id,name);                     
-                                    const tvShowEl = document.createElement("div");
-                                    tvShowEl.classList.add("movie");
-                                    tvShowEl.innerHTML = `
-                                    <img src="${poster_path? IMG_URL + poster_path: "https://placehold.co/1080x1580?text=Poster+Not+Found"}" alt="${name}">
-                                    <div class= "movie-info">
-                                        <h3>${name}</h3>
-                                        <span class="${getColor(roundedVoteAverage)}"> ${roundedVoteAverage}</span>
-                                    </div>
-                                    <div class="overview">
-                                        <h3>overview</h3>
-                                        ${overview? overview: "No overview available"}</br>
-                                        <button class="addToWhishList" id=${id}>Add to Whish List</button> 
-                                    </div>                
-                                    `
-                                    main.appendChild(tvShowEl);
-                            
-                                    $('#' + id).click(() => {
-                                        const tvShowId = id
-                                        $.ajax({
-                                    url: `/wish-list/tv-show/${tvShowId}`,
-                                    method: 'POST',
-                                    contentType: 'application/json',
-                                    data: JSON.stringify(tvShow),
-                                    success: function(response) {
-                                        console.log("The TV show has been added to the wishlist, check it out");
-                                    },
-                                    error: function(xhr, textStatus, errorThrown) {
-                                        if (xhr.status === 409) {
-                                            console.log("TV show already in wishlist, try to add another TV show");
-                                        } else {
-                                            console.error('Error:', errorThrown);
+                                function showTvShow(data) {
+                                    main.innerHTML = '';
+                                    data.forEach(tvShow => {
+                                        const { id, name, poster_path, vote_average, overview } = tvShow;
+                                        const roundedVoteAverage = vote_average.toFixed(1); // round to 1 decimal place
+                                        console.log(id, name);
+                                        const tvShowEl = document.createElement("div");
+                                        tvShowEl.classList.add("movie");
+                                        tvShowEl.innerHTML = `
+                                            <img src="${poster_path ? IMG_URL + poster_path : "https://placehold.co/1080x1580?text=Poster+Not+Found"}" alt="${name}">
+                                            <div class= "movie-info">
+                                                <h3>${name}</h3>
+                                                <span class="${getColor(roundedVoteAverage)}"> ${roundedVoteAverage}</span>
+                                            </div>
+                                            <div class="overview">
+                                                <h3>overview</h3>
+                                                ${overview ? overview : "No overview available"}</br>
+                                                <div class="button-container">
+                                                    <button class="addToWhishList" id=${id}>Add to Wish List</button>
+                                                </div>            
+                                            </div>
+                                            `;
+                                main.appendChild(tvShowEl);
+
+                                $('#'+id).click(() => {
+                                    const tvShowId = id;
+                                    const $button = $('#'+id);
+                                    $button.addClass('onclic');
+                                
+                                    setTimeout(function() {
+                                        $button.removeClass('onclic').text('Added ');
+                                        $button.addClass('validate');
+
+                                        setTimeout(function() {
+                                            $button.removeClass('validate').text('Add to Wish List');
+                                        }, 1250);
+                                    }, 2250);
+                                
+                                    $.ajax({
+                                        url: `/wish-list/tv-show/${tvShowId}`,
+                                        method: 'POST',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify(tvShow),
+                                        success: function (response) {
+                                            console.log("The TV show has been added to the wishlist, check it out");
+                                        },
+                                        error: function (xhr, textStatus, errorThrown) {
+                                            if (xhr.status === 500) {
+                                                console.log("TV show already in wishlist, try to add another TV show");
+                                                alert("This TV show is already in your wishlist. \n Please try adding another one.");
+                                            } else {
+                                                console.error('Error:', errorThrown);
+                                            }
                                         }
-                                    }
-                                        });
                                     });
-                                })
+                                });
+                                    });
                                 }
             
                                 function getColor(vote){
