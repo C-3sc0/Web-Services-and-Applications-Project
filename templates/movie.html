@@ -157,12 +157,27 @@
                                             <div class="overview">
                                                 <h3>overview</h3>
                                                 ${overview? overview: "No overview available"}</br>
-                                                <button class="addToWhishList" id=${id}>Add to Whish List</button> 
+                                                <div class="button-container">
+                                                    <button class="addToWhishList" id=${id}>Add to Wish List</button>
+                                                </div>
                                             </div>                
-                                        `
+                                        `;
+
                                     main.appendChild(movieEl)   
                                     $('#' + id).click(() => {
                                         const movieId = id;
+                                        const $button = $('#'+id);
+                                        $button.addClass('onclic');
+                                
+                                        setTimeout(function() {
+                                            $button.removeClass('onclic').text('Added ');
+                                            $button.addClass('validate');
+
+                                            setTimeout(function() {
+                                                $button.removeClass('validate').text('Add to Wish List');
+                                            }, 1250);
+                                        }, 2250);
+
                                         $.ajax({
                                             "url": `/wish-list/${movieId}`,
                                             "method": 'POST',
@@ -172,8 +187,10 @@
                                                 console.log("The movie has been added to the wishlist, check it out");
                                             },
                                             "error": function(xhr, textStatus, errorThrown) {
-                                                if (xhr.status === 409) {
+                                                if (xhr.status === 500) {
                                                     console.log("Movie already in wishlist, try to add another movie");
+                                                    alert("This movie is already in your wishlist. \n Please try adding another one.");
+
                                                 } else {
                                                     console.error('Error:', errorThrown);
                                                 }
