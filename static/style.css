@@ -305,18 +305,87 @@ main{
   margin: 100px auto;
 }
 
-/* Styling for wishlist page */
-.addToWhishList{
-  background-color: #09c8de;
-  color:white;
-  font-size: 13px;
-  font-weight: bold;
-  border:0;
-  border-radius: 50px;
-  padding: 10px 20px;
-  margin-top: 50px;
-  margin-left:50px;
+/* Styling for addToWhishList button */
+.button-container {
+  margin-top: 20px;
+  margin-left: 60px;
+  margin-right: 50px;
+  width: 130px;
+  height: 40px;
 }
+
+.addToWhishList {
+  outline: none;
+  height: 40px;
+  text-align: center;
+  width: 130px;
+  border-radius: 40px;
+  background: #fff;
+  border: 2px solid #1ECD97;
+  color: #1ECD97;
+  letter-spacing: 1px;
+  text-shadow: 0;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.addToWhishList:hover {
+  color: white;
+  background: #1ECD97;
+}
+.addToWhishList:active {
+  letter-spacing: 2px;
+}
+
+.onclic {
+  margin-left: 60px;
+  margin-right: 50px;
+  width: 40px;
+  border-color: #bbbbbb;
+  border-width: 3px;
+  font-size: 0;
+  border-left-color: #1ECD97;
+  -webkit-animation: rotating 2s 0.25s linear infinite;
+          animation: rotating 2s 0.25s linear infinite;
+}
+.onclic:after {
+  content: "";
+}
+.onclic:hover {
+  color: #1ECD97;
+  background: white;
+}
+
+.validate {
+  font-size: 13px;
+  color: white;
+  background: #1ECD97;
+}
+.validate:after {
+  font-family: "FontAwesome";
+  content: "";
+}
+
+@-webkit-keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Styling for wishlist page */
 .table-header {
   background-color: #327a81;
   color: white;
@@ -405,7 +474,7 @@ table tr:nth-child(2n+1) {
     padding: 0 25px;
   }
 }
-#updateForm, #noMovieAvailable, #TvShowUpdateForm{
+#updateForm, #TvShowUpdateForm{
   text-align: center;
   margin-top: 11em;
   margin-right: auto;
