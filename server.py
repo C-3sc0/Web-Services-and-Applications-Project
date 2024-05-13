@@ -1,25 +1,24 @@
 from flask import Flask, request, jsonify, render_template, session
 from config import secret_key as cfg
 import mysql.connector
-import requests
 
 
 app = Flask(__name__)
 app.secret_key = cfg['flask'] # user can choose his own secret key
 
-# Connect to MySQL server without specifying a database
-cnx = mysql.connector.connect(user=cfg['user'], password=cfg['password'],
-                              host=cfg['host'])
-cursor = cnx.cursor()
+def connect_to_database():
+    return mysql.connector.connect(user=cfg['user'], password=cfg['password'], host=cfg['host'], database=cfg['database'])
 
 # Function to create database and table
 def create_database_table():
     try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
         # Create the database if it does not exist
-        cursor.execute("CREATE DATABASE IF NOT EXISTS WishlistDB")
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {cfg['database']}")
 
         # Switch to the created database
-        cursor.execute("USE WishlistDB")
+        cursor.execute(f"USE {cfg['database']}")
 
         # Create movie table if it does not exist
         cursor.execute("CREATE TABLE IF NOT EXISTS movie ("
@@ -37,8 +36,55 @@ def create_database_table():
                        ")")        
 
         cnx.commit()
+        cursor.close()
+        cnx.close()
     except mysql.connector.Error as err:
         print(f"Failed creating database or table: {err}")
+
+# Synchronize movie wishlist with the 'movie' table in the database
+def synchronize_movie_database():
+    try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
+        wishlist = session.get('wishlist', [])
+
+        # Get all movie IDs from the database
+        cursor.execute("SELECT id FROM movie")
+        movie_ids = [row[0] for row in cursor.fetchall()]
+
+        # Check if each movie in the database is present in the wishlist
+        for movie_id in movie_ids:
+            if movie_id not in [item['id'] for item in wishlist]:
+                # Delete the movie from the database if it's not in the wishlist
+                cursor.execute("DELETE FROM movie WHERE id = %s", (movie_id,))
+
+        cnx.commit()
+    except mysql.connector.Error as err:
+        print(f"Failed synchronizing movie wishlist with database: {err}")
+    finally:
+        cursor.close()
+        cnx.close()
+
+# Synchronize TV show wishlist with the 'tvShow' table in the database
+def synchronize_tvshow_database():
+    try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
+        tvShowwishlist = session.get('tvShowwishlist', [])
+
+        cursor.execute("SELECT id FROM tvShow")
+        tv_show_ids = [row[0] for row in cursor.fetchall()]
+
+        for tv_show_id in tv_show_ids:
+            if tv_show_id not in [item['id'] for item in tvShowwishlist]:
+                cursor.execute("DELETE FROM tvShow WHERE id = %s", (tv_show_id,))
+
+        cnx.commit()
+    except mysql.connector.Error as err:
+        print(f"Failed synchronizing TV show wishlist with database: {err}")
+    finally:
+        cursor.close()
+        cnx.close()
 
 create_database_table()
 
@@ -57,6 +103,8 @@ def movie_db():
 @app.route("/wish-list/<int:id>", methods=["GET", "POST", "DELETE"])
 def wishlist(id):
     try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
         # Fetch the wishlist from the session
         wishlist = session.get('wishlist', [])
 
@@ -96,23 +144,33 @@ def wishlist(id):
                 return jsonify({"message": "Movie not found in wishlist"}), 404
 
     except Exception as e:
-        # Handle exceptions appropriately
         return jsonify({"message": str(e)}), 500
-
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route("/wish-list")
 def wish_list():
-    get_movie = ("SELECT * FROM movie")
-    get_show = ("SELECT * FROM tvShow")
-    cursor.execute(get_movie)
-    movies = cursor.fetchall()
-    cursor.execute(get_show)
-    tv_show = cursor.fetchall()
-    print(movies, tv_show)
-    return render_template("wish-list.html", movies=movies, tv_show=tv_show)
+    try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
+        get_movie = "SELECT * FROM movie"
+        get_show = "SELECT * FROM tvShow"
+        cursor.execute(get_movie)
+        movies = cursor.fetchall()
+        cursor.execute(get_show)
+        tv_show = cursor.fetchall()
+        return render_template("wish-list.html", movies=movies, tv_show=tv_show)
+    
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route("/get-wishlist", methods=["GET"])
 def get_wishlist():
+    synchronize_movie_database()
     wishlist = session.get('wishlist', [])
     return jsonify({"wishlist": wishlist}), 200
 
@@ -120,6 +178,8 @@ def get_wishlist():
 @app.route("/wish-list/<int:id>", methods=["PUT"])
 def update_wishlist(id):
     try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
         if not request.is_json:
             return jsonify({"message": "Invalid request: not JSON"}), 400
 
@@ -158,8 +218,13 @@ def update_wishlist(id):
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        cnx.close()
 
-
+#######
+#######
+#######
 # Flask app for Tv Show Database
 @app.route("/tv-show")
 def tv_show_db():
@@ -167,6 +232,7 @@ def tv_show_db():
 
 @app.route("/get_tvshow_wishlist", methods=["GET"])
 def get_show_wishlist():
+    synchronize_tvshow_database()
     tvShowwishlist = session.get('tvShowwishlist', [])
     return jsonify({"tvShowwishlist": tvShowwishlist}), 200
 
@@ -174,6 +240,8 @@ def get_show_wishlist():
 @app.route("/wish-list/tv-show/<int:id>", methods=["GET", "POST", "DELETE"])
 def tvshow_wishlist(id):
     try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
         tvShowwishlist = session.get('tvShowwishlist', [])
 
         if request.method == 'GET':
@@ -211,10 +279,15 @@ def tvshow_wishlist(id):
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route("/update_tv_show_wishlist/<int:id>", methods=["PUT"])
 def update_tv_show_wishlist(id):
     try:
+        cnx = connect_to_database()
+        cursor = cnx.cursor()
         if not request.is_json:
             return jsonify({"message": "Invalid request: not JSON"}), 400
 
@@ -252,6 +325,9 @@ def update_tv_show_wishlist(id):
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        cnx.close()
 
 @app.route("/documentation")
 def doc():
