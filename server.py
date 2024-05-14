@@ -90,6 +90,8 @@ create_database_table()
 
 @app.route('/')
 def project():
+    synchronize_movie_database()
+    synchronize_tvshow_database()
     return render_template('project.html')
 
 @app.route("/about")
@@ -119,7 +121,6 @@ def wishlist(id):
         # Add a new movie to the wishlist
         elif request.method == 'POST':
             movie = request.get_json()
-            movie_id = movie.get('id')
             add_movie = ("INSERT INTO movie "
                          "(id, title, overview, vote) "
                          "VALUES (%s, %s, %s, %s)")
@@ -170,7 +171,6 @@ def wish_list():
 
 @app.route("/get-wishlist", methods=["GET"])
 def get_wishlist():
-    synchronize_movie_database()
     wishlist = session.get('wishlist', [])
     return jsonify({"wishlist": wishlist}), 200
 
@@ -209,7 +209,7 @@ def update_wishlist(id):
                 item['overview'] = movie_overview
                 item['vote_average'] = vote_average
                 session['wishlist'] = wishlist
-                print(item['overview'] , item['vote_average'])
+                print(item['id'], "\n",  item['title'], "\n",  item['poster_path'], "\n", item['overview'], "\n",  item['vote_average'])
                 return jsonify({"message": "Movie updated in wishlist", "updated_movie": item}), 200
 
         return jsonify({"message": "Movie not found in wishlist"}), 404
@@ -232,7 +232,6 @@ def tv_show_db():
 
 @app.route("/get_tvshow_wishlist", methods=["GET"])
 def get_show_wishlist():
-    synchronize_tvshow_database()
     tvShowwishlist = session.get('tvShowwishlist', [])
     return jsonify({"tvShowwishlist": tvShowwishlist}), 200
 
@@ -253,7 +252,6 @@ def tvshow_wishlist(id):
     
         elif request.method == 'POST':
             tv_show = request.get_json() 
-            tvshow_id = tv_show.get('id')
             add_tv_show = ("INSERT INTO tvShow "
                          "(id, name, overview, vote) "
                          "VALUES (%s, %s, %s, %s)")
@@ -317,7 +315,7 @@ def update_tv_show_wishlist(id):
                 item['overview'] = tv_show_overview
                 item['vote_average'] = tv_show_vote_average
                 session['tvShowwishlist'] = tvShowwishlist
-                print(item['overview'] , item['vote_average'])
+                print(item['id'], "\n",  item['name'], "\n",  item['poster_path'], "\n", item['overview'], "\n",  item['vote_average'])
                 return jsonify({"message": "Tv Show updated in wishlist", "update_tv_show": item}), 200
         return jsonify({"message": "Tv Show not found in wishlist"}), 404
     except mysql.connector.Error as err:
