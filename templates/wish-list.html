@@ -172,9 +172,7 @@
                                              "type": 'GET',
                                              "dataType": 'json',
                                              "success": function(wishlistData) {
-                                                 console.log('Wishlist data:', wishlistData);
                                                  const wishlist = wishlistData.wishlist;
-                                                 console.log('Wishlist:', wishlist);
                                                  console.log('Row index:', rowIndex);
 
                                                  if (wishlist && wishlist.length > rowIndex) {
@@ -377,9 +375,7 @@
                                              "type": 'GET',
                                              "dataType": 'json',
                                              "success": function(tvShowwishlistData) {
-                                                 console.log('Wishlist data:', tvShowwishlistData);
                                                  const tvShowwishlist = tvShowwishlistData.tvShowwishlist;
-                                                 console.log('Wishlist:', tvShowwishlist);
                                                  console.log('Row index:', rowIndex);
 
                                                  if (tvShowwishlist && tvShowwishlist.length > rowIndex) {
